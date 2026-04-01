@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  postgres:
+    # No build override needed — uses the image as-is from base compose
+
+  backend:
+    build:
+      target: dev
+    environment:
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
+      - CHOKIDAR_INTERVAL=1000
+      - TSC_WATCHFILE=UseFsEventsWithFallbackDynamicPolling
+    volumes:
+      - ./beenet-backend:/app
+      - /app/node_modules
+      - /app/dist
+
+  frontend:
+    build:
+      target: dev
+    environment:
+      - NODE_ENV=development
+      - WATCHPACK_POLLING=true
+    volumes:
+      - ./beenet-frontend:/app
+      - /app/.next
+      - /app/node_modules

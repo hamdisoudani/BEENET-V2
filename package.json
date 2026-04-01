@@ -1,0 +1,17 @@
+{
+  "name": "beenet",
+  "version": "1.0.0",
+  "description": "Root orchestration for BeeNet with Docker",
+  "private": true,
+  "scripts": {
+    "docker:build": "docker compose build",
+    "docker:up": "docker compose up -d",
+    "docker:logs": "docker compose logs -f",
+    "docker:clean": "docker compose down -v --rmi all",
+    "start": "docker compose up -d",
+    "start:build": "docker compose up --build -d",
+    "stop": "docker compose down",
+    "dev": "docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build",
+    "dev:down": "docker compose -f docker-compose.yml -f docker-compose.dev.yml down"
+  }
+}

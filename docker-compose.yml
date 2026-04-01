@@ -1,0 +1,86 @@
+version: '3.8'
+
+services:
+  # Postgres for LangGraph Checkpointing
+  postgres:
+    image: postgres:15-alpine
+    container_name: beenet-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=beenet
+    volumes:
+      - beenet_pg_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - beenet-network
+
+  # NestJS Proxy Backend Service
+  backend:
+    build:
+      context: ./beenet-backend
+      dockerfile: Dockerfile
+    container_name: beenet-backend
+    ports:
+      - "4000:4000"
+    environment:
+      - NODE_ENV=production
+      - PORT=4000
+      - FRONTEND_ORIGIN=http://localhost:3000
+      - MONGODB_URI=mongodb://mongo:27017/beenet
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/beenet
+    env_file:
+      - ./beenet-backend/.env
+    restart: unless-stopped
+    depends_on:
+      - mongo
+      - postgres
+    networks:
+      - beenet-network
+
+  # Next.js Frontend Service
+  frontend:
+    build:
+      context: ./beenet-frontend
+      dockerfile: Dockerfile
+    container_name: beenet-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - BACKEND_URL=http://backend:4000
+      # Use localhost because the browser makes the requests to the proxy!
+      - NEXT_PUBLIC_BACKEND_URL=http://localhost:4000
+    env_file:
+      - ./beenet-frontend/.env
+    restart: unless-stopped
+    depends_on:
+      - backend
+    networks:
+      - beenet-network
+
+  # MongoDB Service for Metadata
+  mongo:
+    image: mongo:6
+    container_name: beenet-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - beenet_mongo_data:/data/db
+    restart: unless-stopped
+    networks:
+      - beenet-network
+
+volumes:
+  beenet_mongo_data:
+    name: beenet_mongo_data
+  beenet_pg_data:
+    name: beenet_pg_data
+
+networks:
+  beenet-network:
+    name: beenet-network
+    driver: bridge
