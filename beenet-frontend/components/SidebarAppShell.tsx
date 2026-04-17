@@ -7,7 +7,6 @@ import Link from "next/link";
 import Image from "next/image";
 import Logo from "@/public/logo.png";
 import { Moon, Sun, Plus, Settings, ArrowLeft, MoreHorizontal, Trash2, AlertTriangle } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
 
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -289,16 +288,14 @@ function CollapsedBrandReveal() {
   // On mobile, show a floating button to open the sidebar modal
   if (isMobile) {
     return (
-      <motion.button
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
+      <button
         className="fixed left-4 top-4 z-50 md:hidden inline-flex items-center gap-2 rounded-lg border border-border/60 bg-card/80 backdrop-blur-md px-3 py-2 shadow-lg hover:shadow-xl transition-all"
         onClick={() => setOpenMobile(true)}
         aria-label="Open menu"
       >
         <Image src={Logo} alt="BeeNet" width={24} height={24} />
         <span className="text-sm font-semibold">Menu</span>
-      </motion.button>
+      </button>
     );
   }
 
@@ -306,28 +303,20 @@ function CollapsedBrandReveal() {
   if (!isCollapsed) return null;
 
   return (
-    <AnimatePresence>
-      {isCollapsed && (
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -20 }}
-          transition={{ duration: 0.2, ease: "easeOut" }}
-          className="fixed left-4 top-4 z-50 hidden md:flex items-center gap-2 rounded-lg border border-border/60 bg-card/80 backdrop-blur-md px-3 py-2 shadow-lg"
-        >
-          <Link href="/" aria-label="Home" className="inline-flex items-center">
-            <Image src={Logo} alt="BeeNet" width={24} height={24} />
-          </Link>
-          {pathname?.startsWith("/c/") && (
-            <Link href="/" aria-label="Back to home" className="ml-1 inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground">
-              <ArrowLeft className="h-3.5 w-3.5" />
-              <span>Back</span>
-            </Link>
-          )}
-          <SidebarTrigger className="ml-1 h-7 w-7" aria-label="Open sidebar" />
-        </motion.div>
+    <div
+      className="fixed left-4 top-4 z-50 hidden md:flex items-center gap-2 rounded-lg border border-border/60 bg-card/80 backdrop-blur-md px-3 py-2 shadow-lg transition-all duration-200 ease-out"
+    >
+      <Link href="/" aria-label="Home" className="inline-flex items-center">
+        <Image src={Logo} alt="BeeNet" width={24} height={24} />
+      </Link>
+      {pathname?.startsWith("/c/") && (
+        <Link href="/" aria-label="Back to home" className="ml-1 inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground">
+          <ArrowLeft className="h-3.5 w-3.5" />
+          <span>Back</span>
+        </Link>
       )}
-    </AnimatePresence>
+      <SidebarTrigger className="ml-1 h-7 w-7" aria-label="Open sidebar" />
+    </div>
   );
 }
 

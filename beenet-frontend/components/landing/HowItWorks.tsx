@@ -1,9 +1,16 @@
 import * as React from "react"
-import { motion, AnimatePresence } from "motion/react"
 import { Workflow, FolderSync, Pencil, ArrowUpRight, Paperclip, ChevronDown, Bot, User, Sparkles, FileText, Check, Mail, Database, MessageSquare, ArrowRight, Zap, MoreVertical, Loader2 } from "lucide-react"
 import { Button } from "../ui/button"
 import { Badge } from "../ui/badge"
 import { cn } from "@/lib/utils"
+
+const ANIMATION_STYLES = `
+  @keyframes tab-progress-5s { from { width: 0 } to { width: 100% } }
+  @keyframes fadeBlurIn { from { opacity: 0; transform: scale(0.95); filter: blur(4px); } to { opacity: 1; transform: scale(1); filter: blur(0); } }
+  @keyframes fadeDownIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
+  @keyframes fadeUpIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+`
 
 export function HowItWorks() {
   const [activeStep, setActiveStep] = React.useState(0)
@@ -34,6 +41,8 @@ export function HowItWorks() {
   }, [steps.length])
 
   return (
+    <>
+    <style>{ANIMATION_STYLES}</style>
     <section id="works-features" className="flex flex-col">
       <div className="bg-border h-px w-full" />
       <div className="relative z-1 overflow-hidden pt-8 pb-5 text-center">
@@ -67,12 +76,10 @@ export function HowItWorks() {
                   </div>
                   <p className="text-muted-foreground">{step.description}</p>
                   {activeStep === index && (
-                    <motion.div 
+                    <div 
                       key={`progress-${index}`}
                       className="bg-primary absolute inset-x-0 bottom-0 left-0 h-0.5"
-                      initial={{ width: 0 }}
-                      animate={{ width: "100%" }}
-                      transition={{ duration: 5, ease: "linear" }}
+                      style={{ animation: 'tab-progress-5s 5s linear forwards' }}
                     />
                   )}
                 </button>
@@ -80,40 +87,27 @@ export function HowItWorks() {
             </div>
 
             <div className="relative flex items-center justify-center overflow-hidden px-4 py-12 max-lg:h-120 bg-background min-h-[450px]">
-              <AnimatePresence mode="wait">
                 {activeStep === 0 && (
-                  <motion.div 
-                    key="step-0"
-                    initial={{ opacity: 0, scale: 0.95, filter: "blur(4px)" }}
-                    animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-                    exit={{ opacity: 0, scale: 1.05, filter: "blur(4px)" }}
-                    transition={{ duration: 0.4, ease: "easeOut" }}
+                  <div 
+                    key={`step-${activeStep}`}
+                    style={{ animation: 'fadeBlurIn 0.4s ease-out both' }}
                     className="relative z-1 w-full max-w-sm flex-col rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.4)] bg-card border border-border overflow-hidden absolute"
                   >
-                    <motion.div 
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.2 }}
+                    <div 
                       className="bg-sky-500/10 dark:bg-sky-500/20 px-4 py-2 flex items-center justify-between text-sky-600 dark:text-sky-400 text-sm font-medium border-b border-sky-500/20"
                     >
                       Connecting tools
                       <MoreVertical className="size-4" />
-                    </motion.div>
+                    </div>
                     
                     <div className="p-5 space-y-5">
-                      <motion.div 
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.3 }}
+                      <div 
                         className="text-lg font-medium leading-tight text-foreground"
                       >
                         Summarize daily team updates from Slack and email
-                      </motion.div>
+                      </div>
                       
-                      <motion.div 
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.4 }}
+                      <div 
                         className="flex items-center justify-between"
                       >
                         <div className="flex items-center gap-2">
@@ -122,22 +116,18 @@ export function HowItWorks() {
                             GPT-5-mini
                             <ChevronDown className="size-3 text-muted-foreground" />
                           </Button>
-                          <motion.div 
-                            animate={{ rotate: 360 }}
-                            transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                          <div 
                             className="size-8 rounded-full bg-rose-50 dark:bg-rose-500/10 flex items-center justify-center border border-rose-200 dark:border-rose-500/30"
                           >
                             <Paperclip className="size-3.5 text-rose-400" />
-                          </motion.div>
+                          </div>
                         </div>
-                        <motion.div 
-                          animate={{ rotate: 360 }}
-                          transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+                        <div 
                           className="size-8 rounded-full bg-rose-400 flex items-center justify-center shadow-sm"
                         >
                           <Loader2 className="size-4 text-white" />
-                        </motion.div>
-                      </motion.div>
+                        </div>
+                      </div>
 
                       <div className="space-y-3 pt-2">
                         {[
@@ -146,186 +136,129 @@ export function HowItWorks() {
                           { icon: "https://shadcn-nextjs-orion-landing-page.vercel.app/images/hero-section/02.webp", text: "3. Checking permissions and updates", delay: 0.7 },
                           { icon: "https://shadcn-nextjs-orion-landing-page.vercel.app/images/hero-section/04.webp", text: "4. Checking connections", delay: 0.8 }
                         ].map((item, i) => (
-                          <motion.div 
+                          <div 
                             key={i}
-                            initial={{ opacity: 0, x: -10 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: item.delay }}
                             className="flex items-center gap-3 text-sm text-muted-foreground"
                           >
                             <img src={item.icon} className="size-4" alt="" referrerPolicy="no-referrer" />
                             <span>{item.text}</span>
-                          </motion.div>
+                          </div>
                         ))}
                       </div>
                     </div>
-                  </motion.div>
+                  </div>
                 )}
 
                 {activeStep === 1 && (
-                  <motion.div 
-                    key="step-1"
-                    initial={{ opacity: 0, scale: 0.95, filter: "blur(4px)" }}
-                    animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-                    exit={{ opacity: 0, scale: 1.05, filter: "blur(4px)" }}
-                    transition={{ duration: 0.4, ease: "easeOut" }}
+                  <div 
+                    key={`step-${activeStep}`}
+                    style={{ animation: 'fadeBlurIn 0.4s ease-out both' }}
                     className="relative z-1 w-full max-w-md flex-col rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.4)] bg-card border border-border p-8 absolute"
                   >
                     <div className="flex flex-col items-center justify-center gap-10 h-[280px]">
                       <div className="relative w-full max-w-[280px] aspect-square flex items-center justify-center">
                         {/* Center Node */}
-                        <motion.div 
-                          initial={{ scale: 0 }}
-                          animate={{ scale: 1 }}
-                          transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+                        <div 
                           className="absolute z-20 size-20 rounded-2xl bg-primary shadow-lg shadow-primary/30 flex items-center justify-center border-4 border-background"
                         >
                           <Bot className="size-10 text-primary-foreground" />
-                        </motion.div>
+                        </div>
                         
                         {/* Orbiting Rings */}
-                        <motion.div 
-                          animate={{ rotate: 360 }}
-                          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                        <div 
                           className="absolute inset-0 rounded-full border border-dashed border-primary/30"
                         />
-                        <motion.div 
-                          animate={{ rotate: -360 }}
-                          transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+                        <div 
                           className="absolute inset-6 rounded-full border border-primary/20"
                         />
                         
                         {/* Tool Nodes */}
-                        <motion.div 
-                          initial={{ opacity: 0, scale: 0 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          transition={{ delay: 0.2, type: "spring" }}
-                          whileHover={{ scale: 1.1 }}
+                        <div 
                           className="absolute -top-4 left-10 z-10 size-14 rounded-2xl bg-card shadow-md border border-border flex items-center justify-center"
                         >
                           <MessageSquare className="size-6 text-[#4A154B]" />
-                        </motion.div>
+                        </div>
                         
-                        <motion.div 
-                          initial={{ opacity: 0, scale: 0 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          transition={{ delay: 0.4, type: "spring" }}
-                          whileHover={{ scale: 1.1 }}
+                        <div 
                           className="absolute top-1/2 -right-4 -translate-y-1/2 z-10 size-14 rounded-2xl bg-card shadow-md border border-border flex items-center justify-center"
                         >
                           <Mail className="size-6 text-[#EA4335]" />
-                        </motion.div>
+                        </div>
                         
-                        <motion.div 
-                          initial={{ opacity: 0, scale: 0 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          transition={{ delay: 0.6, type: "spring" }}
-                          whileHover={{ scale: 1.1 }}
+                        <div 
                           className="absolute -bottom-4 left-10 z-10 size-14 rounded-2xl bg-card shadow-md border border-border flex items-center justify-center"
                         >
                           <div className="size-6 rounded bg-muted" />
-                        </motion.div>
+                        </div>
 
                         {/* Connection Lines */}
                         <svg className="absolute inset-0 w-full h-full -z-10" overflow="visible">
-                          <motion.path 
+                          <path 
                             d="M 80 30 L 140 140" 
                             stroke="currentColor"
                             className="text-primary/40"
                             strokeWidth="1.5" 
-                            initial={{ pathLength: 0 }}
-                            animate={{ pathLength: 1 }}
-                            transition={{ duration: 1, delay: 0.3 }}
                           />
-                          <motion.path 
+                          <path 
                             d="M 280 140 L 140 140" 
                             stroke="currentColor"
                             className="text-primary/40"
                             strokeWidth="1.5" 
-                            initial={{ pathLength: 0 }}
-                            animate={{ pathLength: 1 }}
-                            transition={{ duration: 1, delay: 0.5 }}
                           />
-                          <motion.path 
+                          <path 
                             d="M 80 250 L 140 140" 
                             stroke="currentColor"
                             className="text-primary/40"
                             strokeWidth="1.5" 
-                            initial={{ pathLength: 0 }}
-                            animate={{ pathLength: 1 }}
-                            transition={{ duration: 1, delay: 0.7 }}
                           />
                           
                           {/* Data particles */}
-                          <motion.circle r="3" className="fill-primary"
-                            animate={{ offsetDistance: ["0%", "100%"] }}
+                          <circle r="3" className="fill-primary"
                             style={{ offsetPath: 'path("M 80 30 L 140 140")' }}
-                            transition={{ duration: 1.5, repeat: Infinity, ease: "linear", delay: 0.5 }}
                           />
-                          <motion.circle r="3" className="fill-primary"
-                            animate={{ offsetDistance: ["0%", "100%"] }}
+                          <circle r="3" className="fill-primary"
                             style={{ offsetPath: 'path("M 280 140 L 140 140")' }}
-                            transition={{ duration: 1.5, repeat: Infinity, ease: "linear", delay: 1 }}
                           />
-                          <motion.circle r="3" className="fill-primary"
-                            animate={{ offsetDistance: ["100%", "0%"] }}
+                          <circle r="3" className="fill-primary"
                             style={{ offsetPath: 'path("M 80 250 L 140 140")' }}
-                            transition={{ duration: 1.5, repeat: Infinity, ease: "linear", delay: 0.2 }}
                           />
                         </svg>
                       </div>
                       
-                      <motion.div 
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.8 }}
+                      <div 
                         className="absolute -bottom-4 flex items-center gap-2 bg-primary/10 dark:bg-primary/20 backdrop-blur-sm px-5 py-2.5 rounded-full border border-primary/30 text-sm font-medium text-foreground shadow-sm"
                       >
-                        <motion.div
-                          animate={{ rotate: 360 }}
-                          transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                        <div
                         >
                           <FolderSync className="size-4 text-primary" />
-                        </motion.div>
+                        </div>
                         Authenticating and syncing data...
-                      </motion.div>
+                      </div>
                     </div>
-                  </motion.div>
+                  </div>
                 )}
 
                 {activeStep === 2 && (
-                  <motion.div 
-                    key="step-2"
-                    initial={{ opacity: 0, scale: 0.95, filter: "blur(4px)" }}
-                    animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-                    exit={{ opacity: 0, scale: 1.05, filter: "blur(4px)" }}
-                    transition={{ duration: 0.4, ease: "easeOut" }}
+                  <div 
+                    key={`step-${activeStep}`}
+                    style={{ animation: 'fadeBlurIn 0.4s ease-out both' }}
                     className="relative z-1 w-full max-w-sm flex-col rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.4)] bg-card border border-border overflow-hidden absolute"
                   >
-                    <motion.div 
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.2 }}
+                    <div 
                       className="bg-sky-500/10 dark:bg-sky-500/20 px-4 py-2 flex items-center justify-between text-sky-600 dark:text-sky-400 text-sm font-medium border-b border-sky-500/20"
                     >
                       Review Output
                       <MoreVertical className="size-4" />
-                    </motion.div>
+                    </div>
                     
                     <div className="p-5 space-y-5">
-                      <motion.div 
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.3 }}
+                      <div 
                         className="text-lg font-medium leading-tight text-foreground"
                       >
                         Daily Team Summary - Approved
-                      </motion.div>
+                      </div>
                       
-                      <motion.div 
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.4 }}
+                      <div 
                         className="flex items-center justify-between"
                       >
                         <div className="flex items-center gap-2">
@@ -334,24 +267,18 @@ export function HowItWorks() {
                             GPT-5-mini
                             <ChevronDown className="size-3 text-muted-foreground" />
                           </Button>
-                          <motion.div 
-                            initial={{ scale: 0 }}
-                            animate={{ scale: 1 }}
-                            transition={{ delay: 0.5, type: "spring" }}
+                          <div 
                             className="size-8 rounded-full bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center border border-emerald-200 dark:border-emerald-500/30"
                           >
                             <Check className="size-3.5 text-emerald-500" />
-                          </motion.div>
+                          </div>
                         </div>
-                        <motion.div 
-                          initial={{ scale: 0 }}
-                          animate={{ scale: 1 }}
-                          transition={{ delay: 0.6, type: "spring" }}
+                        <div 
                           className="size-8 rounded-full bg-emerald-500 flex items-center justify-center shadow-sm"
                         >
                           <Check className="size-4 text-white" />
-                        </motion.div>
-                      </motion.div>
+                        </div>
+                      </div>
 
                       <div className="space-y-3 pt-2">
                         {[
@@ -360,32 +287,26 @@ export function HowItWorks() {
                           { text: "3. Checking permissions and updates", delay: 0.9 },
                           { text: "4. Checking connections", delay: 1.0 }
                         ].map((item, i) => (
-                          <motion.div 
+                          <div 
                             key={i}
-                            initial={{ opacity: 0, x: -10 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: item.delay }}
                             className="flex items-center gap-3 text-sm text-muted-foreground"
                           >
-                            <motion.div
-                              initial={{ scale: 0 }}
-                              animate={{ scale: 1 }}
-                              transition={{ delay: item.delay + 0.1, type: "spring" }}
+                            <div
                             >
                               <Check className="size-4 text-emerald-500" />
-                            </motion.div>
+                            </div>
                             <span className="line-through opacity-60">{item.text}</span>
-                          </motion.div>
+                          </div>
                         ))}
                       </div>
                     </div>
-                  </motion.div>
+                  </div>
                 )}
-              </AnimatePresence>
             </div>
           </div>
         </div>
       </div>
     </section>
+    </>
   )
 }
