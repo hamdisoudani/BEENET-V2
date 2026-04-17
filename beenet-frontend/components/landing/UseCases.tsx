@@ -1,5 +1,4 @@
 import * as React from "react"
-import { motion } from "motion/react"
 import { BadgePercent, TrendingUp, Crown, ArrowRight } from "lucide-react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs"
 import { Button } from "../ui/button"
@@ -28,9 +27,7 @@ export function UseCases() {
                 <div className="bg-border h-px w-full" />
                 
                 <TabsContent value="sales" className="mt-0 px-4 pt-8 sm:px-6 lg:px-8 pb-8">
-                  <motion.div 
-                    initial={{ opacity: 0, filter: "blur(10px)" }}
-                    animate={{ opacity: 1, filter: "blur(0px)" }}
+                  <div
                     className="space-y-4"
                   >
                     <h3 className="text-3xl font-medium">Sales Leaders use ai agent to automate and optimise sales workflows</h3>
@@ -40,13 +37,11 @@ export function UseCases() {
                     <Button variant="link" className="p-0 h-auto text-primary group">
                       Learn more <ArrowRight className="size-4 ml-1 transition-transform group-hover:translate-x-1" />
                     </Button>
-                  </motion.div>
+                  </div>
                 </TabsContent>
 
                 <TabsContent value="marketing" className="mt-0 px-4 pt-8 sm:px-6 lg:px-8 pb-8">
-                  <motion.div 
-                    initial={{ opacity: 0, filter: "blur(10px)" }}
-                    animate={{ opacity: 1, filter: "blur(0px)" }}
+                  <div
                     className="space-y-4"
                   >
                     <h3 className="text-3xl font-medium">Marketing Teams automate content creation and distribution</h3>
@@ -56,13 +51,11 @@ export function UseCases() {
                     <Button variant="link" className="p-0 h-auto text-primary group">
                       Learn more <ArrowRight className="size-4 ml-1 transition-transform group-hover:translate-x-1" />
                     </Button>
-                  </motion.div>
+                  </div>
                 </TabsContent>
 
                 <TabsContent value="founders" className="mt-0 px-4 pt-8 sm:px-6 lg:px-8 pb-8">
-                  <motion.div 
-                    initial={{ opacity: 0, filter: "blur(10px)" }}
-                    animate={{ opacity: 1, filter: "blur(0px)" }}
+                  <div
                     className="space-y-4"
                   >
                     <h3 className="text-3xl font-medium">Founders scale their operations without increasing headcount</h3>
@@ -72,7 +65,7 @@ export function UseCases() {
                     <Button variant="link" className="p-0 h-auto text-primary group">
                       Learn more <ArrowRight className="size-4 ml-1 transition-transform group-hover:translate-x-1" />
                     </Button>
-                  </motion.div>
+                  </div>
                 </TabsContent>
 
                 <div className="bg-border h-px w-full" />
